@@ -21,8 +21,8 @@ A modern dashboard built with SvelteKit 2 and Svelte 5 that visualizes AWS cloud
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd aws-cloud-savings
+git clone https://github.com/b-d-m-p/north-cloud-case-study
+cd north-cloud-case-study
 ```
 
 2. Install dependencies:
