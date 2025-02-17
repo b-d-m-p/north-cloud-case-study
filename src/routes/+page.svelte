@@ -98,46 +98,49 @@
 	<div class="h-0.5 rounded-full bg-gradient-to-r from-[#8C3FFF] to-[#00FFCB] shadow-sm"></div>
 
 	<!-- Overview Cards -->
-	<div class="dark bg-zenith grid gap-4 rounded-lg p-4 md:grid-cols-2 lg:grid-cols-4">
-		<Card.Root class="bg-bruma-800">
-			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium ">Monthly Average</Card.Title>
-				<Activity class="text-muted-foreground h-4 w-4" />
-			</Card.Header>
-			<Card.Content>
-				<div class="font-redhat text-2xl">${monthlyAverage.toFixed(2)}</div>
-			</Card.Content>
-		</Card.Root>
+	<div class="dark bg-zenith rounded-lg p-4">
+		<h2 class="text-lg text-white uppercase">Overview</h2>
+		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+			<Card.Root class="bg-bruma-800">
+				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+					<Card.Title class="text-sm font-medium ">Monthly Average</Card.Title>
+					<Activity class="text-muted-foreground h-4 w-4" />
+				</Card.Header>
+				<Card.Content>
+					<div class="font-redhat text-2xl">${monthlyAverage.toFixed(2)}</div>
+				</Card.Content>
+			</Card.Root>
 
-		<Card.Root class="bg-bruma-800">
-			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium ">Savings This Month</Card.Title>
-				<Calendar class="text-muted-foreground h-4 w-4" />
-			</Card.Header>
-			<Card.Content>
-				<div class="font-redhat text-2xl">+${data.overview.currentMonthSavings}</div>
-			</Card.Content>
-		</Card.Root>
+			<Card.Root class="bg-bruma-800">
+				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+					<Card.Title class="text-sm font-medium ">Savings This Month</Card.Title>
+					<Calendar class="text-muted-foreground h-4 w-4" />
+				</Card.Header>
+				<Card.Content>
+					<div class="font-redhat text-2xl">+${data.overview.currentMonthSavings}</div>
+				</Card.Content>
+			</Card.Root>
 
-		<Card.Root class="bg-bruma-800">
-			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium ">Percentage Change</Card.Title>
-				<Percent class="text-muted-foreground h-4 w-4" />
-			</Card.Header>
-			<Card.Content>
-				<div class="font-redhat text-2xl">{data.overview.percentageChange}%</div>
-			</Card.Content>
-		</Card.Root>
+			<Card.Root class="bg-bruma-800">
+				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+					<Card.Title class="text-sm font-medium ">Percentage Change</Card.Title>
+					<Percent class="text-muted-foreground h-4 w-4" />
+				</Card.Header>
+				<Card.Content>
+					<div class="font-redhat text-2xl">{data.overview.percentageChange}%</div>
+				</Card.Content>
+			</Card.Root>
 
-		<Card.Root class="bg-nebula border-nebula">
-			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class="text-sm font-medium ">Total Savings</Card.Title>
-				<DollarSign class="h-4 w-4 text-white " />
-			</Card.Header>
-			<Card.Content>
-				<div class="font-redhat text-2xl">${data.overview.totalSavings}</div>
-			</Card.Content>
-		</Card.Root>
+			<Card.Root class="bg-nebula border-nebula">
+				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+					<Card.Title class="text-sm font-medium ">Total Savings</Card.Title>
+					<DollarSign class="h-4 w-4 text-white " />
+				</Card.Header>
+				<Card.Content>
+					<div class="font-redhat text-2xl">${data.overview.totalSavings}</div>
+				</Card.Content>
+			</Card.Root>
+		</div>
 	</div>
 
 	<!-- Charts Section -->
