@@ -100,82 +100,92 @@
 
 	<div class="h-0.5 rounded-full bg-gradient-to-r from-[#8C3FFF] to-[#00FFCB] shadow-sm"></div>
 
-	<!-- Overview Cards -->
-	<div class="dark bg-zenith rounded-lg p-4">
-		<h2 class="text-lg text-white uppercase">Overview</h2>
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<Card.Root class="bg-bruma-800">
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium ">Monthly Average</Card.Title>
-					<Activity class="text-muted-foreground h-4 w-4" />
-				</Card.Header>
-				{#if !isLoading}
-					<Card.Content>
-						<div transition:fade class="font-redhat text-2xl">
-							${monthlyAverage.toFixed(2)}
-						</div>
-					</Card.Content>
-				{/if}
-			</Card.Root>
+	{#if !isLoading}
+		<!-- Overview Cards -->
+		<div class="dark bg-zenith rounded-lg p-4">
+			<h2 class="text-lg text-white uppercase">Overview</h2>
+			<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4" transition:fade={{ duration: 2000 }}>
+				<Card.Root class="bg-bruma-800">
+					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+						<Card.Title class="text-sm font-medium ">Monthly Average</Card.Title>
+						<Activity class="text-muted-foreground h-4 w-4" />
+					</Card.Header>
 
-			<Card.Root class="bg-bruma-800">
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium ">Savings This Month</Card.Title>
-					<Calendar class="text-muted-foreground h-4 w-4" />
-				</Card.Header>
-				{#if !isLoading}
-					<Card.Content>
-						<div transition:fade class="font-redhat text-2xl">
-							+${data.overview.currentMonthSavings}
-						</div>
-					</Card.Content>
-				{/if}
-			</Card.Root>
+					<div>
+						<Card.Content>
+							<div class="font-redhat text-2xl">
+								${monthlyAverage.toFixed(2)}
+							</div>
+						</Card.Content>
+					</div>
+				</Card.Root>
 
-			<Card.Root class="bg-bruma-800">
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium ">Percentage Change</Card.Title>
-					<Percent class="text-muted-foreground h-4 w-4" />
-				</Card.Header>
-				{#if !isLoading}
-					<Card.Content>
-						<div transition:fade class="font-redhat text-2xl">
-							{data.overview.percentageChange}%
-						</div>
-					</Card.Content>
-				{/if}
-			</Card.Root>
+				<Card.Root class="bg-bruma-800">
+					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+						<Card.Title class="text-sm font-medium ">Savings This Month</Card.Title>
+						<Calendar class="text-muted-foreground h-4 w-4" />
+					</Card.Header>
 
-			<Card.Root class="bg-nebula border-nebula">
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium ">Total Savings</Card.Title>
-					<DollarSign class="h-4 w-4 text-white " />
-				</Card.Header>
-				{#if !isLoading}
-					<Card.Content>
-						<div transition:fade class="font-redhat text-2xl">
-							${data.overview.totalSavings}
-						</div>
-					</Card.Content>
-				{/if}
-			</Card.Root>
+					<div>
+						<Card.Content>
+							<div class="font-redhat text-2xl">
+								+${data.overview.currentMonthSavings}
+							</div>
+						</Card.Content>
+					</div>
+				</Card.Root>
+
+				<Card.Root class="bg-bruma-800">
+					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+						<Card.Title class="text-sm font-medium ">Percentage Change</Card.Title>
+						<Percent class="text-muted-foreground h-4 w-4" />
+					</Card.Header>
+
+					<div>
+						<Card.Content>
+							<div class="font-redhat text-2xl">
+								{data.overview.percentageChange}%
+							</div>
+						</Card.Content>
+					</div>
+				</Card.Root>
+
+				<Card.Root class="bg-nebula border-nebula">
+					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+						<Card.Title class="text-sm font-medium ">Total Savings</Card.Title>
+						<DollarSign class="h-4 w-4 text-white " />
+					</Card.Header>
+
+					<div>
+						<Card.Content>
+							<div class="font-redhat text-2xl">
+								${data.overview.totalSavings}
+							</div>
+						</Card.Content>
+					</div>
+				</Card.Root>
+			</div>
 		</div>
-	</div>
+	{/if}
 
 	<!-- Charts Section -->
+
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-		<Card.Root class="col-span-4">
-			<Card.Header>
-				<Card.Title>Monthly Saving Trends</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
-					{#if isLoading}
-						<div transition:fade>
-							<Skeleton class="h-[350px] w-full" />
-						</div>
-					{:else}
-						<div transition:fade>
+		{#if !isLoading}
+			<Card.Root class="col-span-4">
+				<Card.Header>
+					<Card.Title
+						><span transition:fade={{ duration: 3000 }}>Monthly Saving Trends</span></Card.Title
+					>
+				</Card.Header>
+				<Card.Content>
+					<div
+						class="chart"
+						bind:clientWidth={width}
+						bind:clientHeight={height}
+						transition:fade={{ duration: 3000 }}
+					>
+						<div>
 							<svg>
 								<!-- y axis -->
 								<g class="axis y-axis">
@@ -245,24 +255,20 @@
 								</g>
 							</svg>
 						</div>
-					{/if}
-				</div>
-			</Card.Content>
-		</Card.Root>
-
-		<Card.Root class="col-span-3">
-			<Card.Header>
-				<Card.Title>Savings by AWS Service</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				{#if isLoading}
-					<div class="space-y-4" transition:fade>
-						{#each Array(5) as _}
-							<Skeleton class="h-8 w-full" />
-						{/each}
 					</div>
-				{:else}
-					<div transition:fade>
+				</Card.Content>
+			</Card.Root>
+		{/if}
+
+		{#if !isLoading}
+			<Card.Root class="col-span-3">
+				<Card.Header>
+					<Card.Title>
+						<span transition:fade={{ duration: 3000 }}>Savings by AWS Service</span>
+					</Card.Title>
+				</Card.Header>
+				<Card.Content>
+					<div transition:fade={{ duration: 3000 }}>
 						<Table.Root>
 							<Table.Body>
 								{#each data.savingsByCategory as saving}
@@ -274,26 +280,23 @@
 							</Table.Body>
 						</Table.Root>
 					</div>
-				{/if}
-			</Card.Content>
-		</Card.Root>
+				</Card.Content>
+			</Card.Root>
+		{/if}
 	</div>
 
 	<!-- Detailed Savings Table -->
-	<Card.Root>
-		<Card.Header>
-			<Card.Title>Detailed Savings</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			{#if isLoading}
-				<div class="space-y-4" transition:fade>
-					{#each Array(5) as _}
-						<Skeleton class="h-8 w-full" />
-					{/each}
-				</div>
-			{:else}
-				<div class="relative w-full overflow-auto rounded-lg border border-black/10">
-					<div transition:fade>
+	{#if !isLoading}
+		<Card.Root>
+			<Card.Header>
+				<Card.Title>Detailed Savings</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<div
+					class="relative w-full overflow-auto rounded-lg border border-black/10"
+					transition:fade={{ duration: 3000 }}
+				>
+					<div>
 						<table class="bg-light w-full caption-bottom rounded-lg text-sm">
 							<thead>
 								<tr
@@ -318,9 +321,9 @@
 						</table>
 					</div>
 				</div>
-			{/if}
-		</Card.Content>
-	</Card.Root>
+			</Card.Content>
+		</Card.Root>
+	{/if}
 </div>
 
 <style>
