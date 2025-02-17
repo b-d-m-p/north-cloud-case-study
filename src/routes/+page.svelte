@@ -6,6 +6,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { scaleLinear } from 'd3-scale';
 	import { onMount } from 'svelte';
+	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { fade } from 'svelte/transition';
 
 	// Define types for our data structures
 	type SavingsTrend = {
@@ -60,12 +62,15 @@
 	let innerWidth = $derived(width - (padding.left + padding.right));
 	let barWidth = $derived(innerWidth / data.savingsTrends.length);
 
+	let isLoading = $state(true);
+
 	function formatMobile(tick: string) {
 		return tick.substring(0, 3);
 	}
 
 	async function fetchData() {
 		try {
+			isLoading = true;
 			const response = await fetch('/api', {
 				headers: {
 					Authorization: import.meta.env.VITE_API_KEY
@@ -81,6 +86,8 @@
 			data = jsonData;
 		} catch (error) {
 			console.error('Error fetching data:', error);
+		} finally {
+			isLoading = false;
 		}
 	}
 
@@ -106,9 +113,13 @@
 					<Card.Title class="text-sm font-medium ">Monthly Average</Card.Title>
 					<Activity class="text-muted-foreground h-4 w-4" />
 				</Card.Header>
-				<Card.Content>
-					<div class="font-redhat text-2xl">${monthlyAverage.toFixed(2)}</div>
-				</Card.Content>
+				{#if !isLoading}
+					<Card.Content>
+						<div transition:fade class="font-redhat text-2xl">
+							${monthlyAverage.toFixed(2)}
+						</div>
+					</Card.Content>
+				{/if}
 			</Card.Root>
 
 			<Card.Root class="bg-bruma-800">
@@ -116,9 +127,13 @@
 					<Card.Title class="text-sm font-medium ">Savings This Month</Card.Title>
 					<Calendar class="text-muted-foreground h-4 w-4" />
 				</Card.Header>
-				<Card.Content>
-					<div class="font-redhat text-2xl">+${data.overview.currentMonthSavings}</div>
-				</Card.Content>
+				{#if !isLoading}
+					<Card.Content>
+						<div transition:fade class="font-redhat text-2xl">
+							+${data.overview.currentMonthSavings}
+						</div>
+					</Card.Content>
+				{/if}
 			</Card.Root>
 
 			<Card.Root class="bg-bruma-800">
@@ -126,9 +141,13 @@
 					<Card.Title class="text-sm font-medium ">Percentage Change</Card.Title>
 					<Percent class="text-muted-foreground h-4 w-4" />
 				</Card.Header>
-				<Card.Content>
-					<div class="font-redhat text-2xl">{data.overview.percentageChange}%</div>
-				</Card.Content>
+				{#if !isLoading}
+					<Card.Content>
+						<div transition:fade class="font-redhat text-2xl">
+							{data.overview.percentageChange}%
+						</div>
+					</Card.Content>
+				{/if}
 			</Card.Root>
 
 			<Card.Root class="bg-nebula border-nebula">
@@ -136,9 +155,13 @@
 					<Card.Title class="text-sm font-medium ">Total Savings</Card.Title>
 					<DollarSign class="h-4 w-4 text-white " />
 				</Card.Header>
-				<Card.Content>
-					<div class="font-redhat text-2xl">${data.overview.totalSavings}</div>
-				</Card.Content>
+				{#if !isLoading}
+					<Card.Content>
+						<div transition:fade class="font-redhat text-2xl">
+							${data.overview.totalSavings}
+						</div>
+					</Card.Content>
+				{/if}
 			</Card.Root>
 		</div>
 	</div>
@@ -151,74 +174,82 @@
 			</Card.Header>
 			<Card.Content>
 				<div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
-					<svg>
-						<!-- y axis -->
-						<g class="axis y-axis">
-							{#each yTicks as tick}
-								<g class="text-xs" transform="translate(0, {yScale(tick)})">
-									<text
-										stroke="none"
-										font-size="12"
-										orientation="left"
-										width="60"
-										height="310"
-										x="57"
-										y="-4"
-										fill="#888888"
-										text-anchor="end"
-									>
-										<tspan x="36" dy="0.355em">${tick}</tspan>
-									</text>
+					{#if isLoading}
+						<div transition:fade>
+							<Skeleton class="h-[350px] w-full" />
+						</div>
+					{:else}
+						<div transition:fade>
+							<svg>
+								<!-- y axis -->
+								<g class="axis y-axis">
+									{#each yTicks as tick}
+										<g class="text-xs" transform="translate(0, {yScale(tick)})">
+											<text
+												stroke="none"
+												font-size="12"
+												orientation="left"
+												width="60"
+												height="310"
+												x="57"
+												y="-4"
+												fill="#888888"
+												text-anchor="end"
+											>
+												<tspan x="36" dy="0.355em">${tick}</tspan>
+											</text>
+										</g>
+									{/each}
 								</g>
-							{/each}
-						</g>
 
-						<!-- x axis -->
-						<g class="axis x-axis">
-							{#each data.savingsTrends as point, i}
-								<g class="text-xs" transform="translate({xScale(i)},{height})">
-									<text
-										stroke="none"
-										font-size="12"
-										orientation="bottom"
-										width="531"
-										height="30"
-										x={barWidth / 2}
-										y="-15"
-										fill="#888888"
-										text-anchor="middle"
-									>
-										<tspan x={barWidth / 2} dy="0.71em">
-											{width > 380 ? point.month : formatMobile(point.month)}
-										</tspan>
-									</text>
+								<!-- x axis -->
+								<g class="axis x-axis">
+									{#each data.savingsTrends as point, i}
+										<g class="text-xs" transform="translate({xScale(i)},{height})">
+											<text
+												stroke="none"
+												font-size="12"
+												orientation="bottom"
+												width="531"
+												height="30"
+												x={barWidth / 2}
+												y="-15"
+												fill="#888888"
+												text-anchor="middle"
+											>
+												<tspan x={barWidth / 2} dy="0.71em">
+													{width > 380 ? point.month : formatMobile(point.month)}
+												</tspan>
+											</text>
+										</g>
+									{/each}
 								</g>
-							{/each}
-						</g>
 
-						<!-- bars -->
-						<g>
-							{#each data.savingsTrends as point, i}
-								<defs>
-									<linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-										<stop offset="0%" style="stop-color:var(--color-start);stop-opacity:1" />
-										<stop offset="100%" style="stop-color:var(--color-end);stop-opacity:1" />
-									</linearGradient>
-								</defs>
+								<!-- bars -->
+								<g>
+									{#each data.savingsTrends as point, i}
+										<defs>
+											<linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+												<stop offset="0%" style="stop-color:var(--color-start);stop-opacity:1" />
+												<stop offset="100%" style="stop-color:var(--color-end);stop-opacity:1" />
+											</linearGradient>
+										</defs>
 
-								<rect
-									class="gradient-rect"
-									x={xScale(i) + 2}
-									y={yScale(point.savings)}
-									width={barWidth - 8}
-									height={yScale(0) - yScale(point.savings)}
-									fill="currentColor"
-									rx="4"
-									ry="4"
-								/>
-							{/each}
-						</g>
-					</svg>
+										<rect
+											class="gradient-rect"
+											x={xScale(i) + 2}
+											y={yScale(point.savings)}
+											width={barWidth - 8}
+											height={yScale(0) - yScale(point.savings)}
+											fill="currentColor"
+											rx="4"
+											ry="4"
+										/>
+									{/each}
+								</g>
+							</svg>
+						</div>
+					{/if}
 				</div>
 			</Card.Content>
 		</Card.Root>
@@ -228,16 +259,26 @@
 				<Card.Title>Savings by AWS Service</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<Table.Root>
-					<Table.Body>
-						{#each data.savingsByCategory as saving}
-							<Table.Row>
-								<Table.Cell class="font-medium">{saving.service}</Table.Cell>
-								<Table.Cell class="font-redhat text-right">${saving.savings}</Table.Cell>
-							</Table.Row>
+				{#if isLoading}
+					<div class="space-y-4" transition:fade>
+						{#each Array(5) as _}
+							<Skeleton class="h-8 w-full" />
 						{/each}
-					</Table.Body>
-				</Table.Root>
+					</div>
+				{:else}
+					<div transition:fade>
+						<Table.Root>
+							<Table.Body>
+								{#each data.savingsByCategory as saving}
+									<Table.Row>
+										<Table.Cell class="font-medium">{saving.service}</Table.Cell>
+										<Table.Cell class="font-redhat text-right">${saving.savings}</Table.Cell>
+									</Table.Row>
+								{/each}
+							</Table.Body>
+						</Table.Root>
+					</div>
+				{/if}
 			</Card.Content>
 		</Card.Root>
 	</div>
@@ -248,28 +289,40 @@
 			<Card.Title>Detailed Savings</Card.Title>
 		</Card.Header>
 		<Card.Content>
-			<div class="relative w-full overflow-auto rounded-lg border border-black/10">
-				<table class="bg-light w-full caption-bottom rounded-lg text-sm">
-					<thead>
-						<tr class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
-							<th class="h-12 px-4 text-left align-middle font-medium">Date</th>
-							<th class="h-12 px-4 text-left align-middle font-medium">Service</th>
-							<th class="h-12 px-4 text-right align-middle font-medium">Savings Amount</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each data.detailedSavings as saving}
-							<tr
-								class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors"
-							>
-								<td class="p-4 align-middle">{saving.date}</td>
-								<td class="p-4 align-middle">{saving.service}</td>
-								<td class="p-4 text-right">${saving.amount}</td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
+			{#if isLoading}
+				<div class="space-y-4" transition:fade>
+					{#each Array(5) as _}
+						<Skeleton class="h-8 w-full" />
+					{/each}
+				</div>
+			{:else}
+				<div class="relative w-full overflow-auto rounded-lg border border-black/10">
+					<div transition:fade>
+						<table class="bg-light w-full caption-bottom rounded-lg text-sm">
+							<thead>
+								<tr
+									class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors"
+								>
+									<th class="h-12 px-4 text-left align-middle font-medium">Date</th>
+									<th class="h-12 px-4 text-left align-middle font-medium">Service</th>
+									<th class="h-12 px-4 text-right align-middle font-medium">Savings Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								{#each data.detailedSavings as saving}
+									<tr
+										class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors"
+									>
+										<td class="p-4 align-middle">{saving.date}</td>
+										<td class="p-4 align-middle">{saving.service}</td>
+										<td class="p-4 text-right">${saving.amount}</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			{/if}
 		</Card.Content>
 	</Card.Root>
 </div>
