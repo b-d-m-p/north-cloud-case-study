@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { Activity, Calendar, Download, DollarSign, Percent } from 'lucide-svelte';
+	import { Activity, Calendar, DollarSign, Percent } from 'lucide-svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import * as Tabs from '$lib/components/ui/tabs';
-	import { Button } from '$lib/components/ui/button';
 	import { scaleLinear } from 'd3-scale';
 	import { onMount } from 'svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { fade } from 'svelte/transition';
 
-	// Define types for our data structures
 	type SavingsTrend = {
 		month: string;
 		savings: number;
@@ -41,7 +38,6 @@
 		data.savingsTrends.reduce((acc, curr) => acc + curr.savings, 0) / data.savingsTrends.length
 	);
 
-	// Chart variables
 	const padding = { top: 20, right: 15, bottom: 20, left: 45 };
 	let width = $state(500);
 	let height = $state(350);
