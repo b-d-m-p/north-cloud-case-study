@@ -196,8 +196,15 @@
 						<!-- bars -->
 						<g>
 							{#each data.savingsTrends as point, i}
+								<defs>
+									<linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+										<stop offset="0%" style="stop-color:var(--color-start);stop-opacity:1" />
+										<stop offset="100%" style="stop-color:var(--color-end);stop-opacity:1" />
+									</linearGradient>
+								</defs>
+
 								<rect
-									class="bg-primary-foreground"
+									class="gradient-rect"
 									x={xScale(i) + 2}
 									y={yScale(point.savings)}
 									width={barWidth - 8}
@@ -286,5 +293,14 @@
 
 	rect {
 		max-width: 51px;
+	}
+
+	.gradient-rect {
+		fill: url(#barGradient);
+	}
+
+	#barGradient {
+		--color-start: var(--color-nebula);
+		--color-end: var(--color-nebula-100);
 	}
 </style>
