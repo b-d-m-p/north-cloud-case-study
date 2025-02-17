@@ -17,35 +17,17 @@
 		BarChart,
 		Bar
 	} from 'recharts';
+	import { onMount } from 'svelte';
 
 	let data = $state({
 		overview: {
-			totalSavings: 1200.5,
-			currentMonthSavings: 200.75,
-			percentageChange: 15.5
+			totalSavings: 0,
+			currentMonthSavings: 0,
+			percentageChange: 0
 		},
-		savingsTrends: [
-			{ month: 'January', savings: 150.0 },
-			{ month: 'February', savings: 175.0 },
-			{ month: 'March', savings: 200.0 },
-			{ month: 'April', savings: 225.0 },
-			{ month: 'May', savings: 250.0 },
-			{ month: 'June', savings: 200.75 }
-		],
-		savingsByCategory: [
-			{ service: 'EC2', savings: 500.0 },
-			{ service: 'S3', savings: 300.0 },
-			{ service: 'RDS', savings: 250.0 },
-			{ service: 'Lambda', savings: 150.0 }
-		],
-		detailedSavings: [
-			{ date: '2025-06-01', service: 'EC2', amount: 50.0 },
-			{ date: '2025-06-02', service: 'S3', amount: 30.0 },
-			{ date: '2025-06-03', service: 'RDS', amount: 25.0 },
-			{ date: '2025-06-04', service: 'Lambda', amount: 15.0 },
-			{ date: '2025-06-05', service: 'EC2', amount: 60.0 },
-			{ date: '2025-06-06', service: 'S3', amount: 40.0 }
-		]
+		savingsTrends: [],
+		savingsByCategory: [],
+		detailedSavings: []
 	});
 
 	let monthlyAverage = $derived(
@@ -54,20 +36,26 @@
 
 	async function fetchData() {
 		try {
-			const response = await fetch('https://north-case-api.vercel.app/api', {
+			const response = await fetch('/api', {
 				headers: {
-					Authorization: '8WT05LTmEmJBmBWHROWGYmjulMDp3EIa38thJTBzc0R4VAGBVMpsifRsXu3bYPz7'
+					Authorization: import.meta.env.VITE_API_KEY
 				}
 			});
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+			}
+
 			const jsonData = await response.json();
-			data = jsonData;
+			data = jsonData; // Update the state with the fetched data
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
 	}
 
 	// Load data when component mounts
-	$effect(() => {
+	onMount(() => {
 		fetchData();
 	});
 </script>
