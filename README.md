@@ -1,38 +1,76 @@
-# sv
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+# AWS Cloud Savings Dashboard
 
-## Creating a project
+A modern dashboard built with SvelteKit 2 and Svelte 5 that visualizes AWS cloud cost savings data.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
+
+- Real-time data visualization
+- Responsive design
+- Skeleton loading states
+- Interactive charts
+- Tabular data presentation
+
+## Prerequisites
+
+- Node.js (v18 or higher)
+- npm or pnpm (recommended)
+
+## Setup
+
+1. Clone the repository:
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+git clone <repository-url>
+cd aws-cloud-savings
 ```
 
-## Developing
+2. Install dependencies:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```bash
+npm install
+```
+
+3. Create a `.env` file in the root directory:
+
+```bash
+VITE_API_KEY=your_api_key_here
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+The application will be available at `http://localhost:5173`
 
-To create a production version of your app:
+## Project Structure
 
-```bash
-npm run build
+```
+├── src/
+│ ├── lib/
+│ │ ├── components/
+│ │ │ └── ui/ # Shadcn UI components
+│ ├── routes/
+│ │ └── +page.svelte # Main dashboard page
+│ └── app.css # Global styles
+├── static/
+├── vite.config.ts
+└── package.json
 ```
 
-You can preview the production build with `npm run preview`.
+## Technology Stack
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- SvelteKit 2
+- Svelte 5 (with Runes)
+- TypeScript
+- Tailwind CSS
+- Shadcn UI
+- D3.js (for charts)
+- Lucide Icons
+
+## API Integration
+
+The dashboard connects to a REST API endpoint for data. Configure the API endpoint in `vite.config.ts`:
