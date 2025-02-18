@@ -66,11 +66,7 @@
 	async function fetchData() {
 		try {
 			isLoading = true;
-			const response = await fetch('/api', {
-				headers: {
-					Authorization: import.meta.env.VITE_API_KEY
-				}
-			});
+			const response = await fetch('/api');
 
 			if (!response.ok) {
 				const errorText = await response.text();
