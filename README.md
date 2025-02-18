@@ -7,7 +7,6 @@ A modern dashboard built with SvelteKit 2 and Svelte 5 that visualizes AWS cloud
 
 - Real-time data visualization
 - Responsive design
-- Skeleton loading states
 - Interactive charts
 - Tabular data presentation
 

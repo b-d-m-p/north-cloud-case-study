@@ -4,7 +4,6 @@
 	import * as Table from '$lib/components/ui/table';
 	import { scaleLinear } from 'd3-scale';
 	import { onMount } from 'svelte';
-	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { fade } from 'svelte/transition';
 
 	type SavingsTrend = {
